@@ -6,8 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
-    container_name: lemp.php
+    #container_name: lemp.php
     restart: always
     tty: true
     environment:
@@ -23,7 +22,7 @@ services:
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: lemp.nginx
+    #container_name: lemp.nginx
     restart: always
     tty: true
     ports:
@@ -38,7 +37,7 @@ services:
   #MySQL Service
   db:
     image: mysql:5.7.22
-    container_name: lemp.db
+    #container_name: lemp.db
     restart: always
     tty: true
     ports:
@@ -59,7 +58,7 @@ services:
   #PhpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: lemp.pma
+    #container_name: lemp.pma
     environment:
       - PMA_ARBITRARY=1
     restart: always
@@ -73,6 +72,16 @@ services:
       - /sessions
     networks:
       - app-network
+
+  #Redis
+  redis:
+    image: redis
+    #container_name: lemp.redis
+    restart: always
+    ports:
+     - "6379:6379"
+    volumes:
+     - ./redis:/data
 
 #Docker Networks
 networks:

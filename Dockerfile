@@ -6,7 +6,7 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-		build-essential \
+	build-essential \
     mysql-client \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -26,6 +26,23 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl mysqli
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
+
+#Redis
+ENV PHPREDIS_VERSION 3.1.4
+
+RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz  \
+    && mkdir /tmp/redis \
+    && tar -xf /tmp/redis.tar.gz -C /tmp/redis \
+    && rm /tmp/redis.tar.gz \
+    && ( \
+    cd /tmp/redis/phpredis-$PHPREDIS_VERSION \
+    && phpize \
+    && ./configure \
+    && make -j$(nproc) \
+    && make install \
+    ) \
+    && rm -r /tmp/redis \
+    && docker-php-ext-enable redis
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
