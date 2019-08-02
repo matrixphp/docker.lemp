@@ -1,0 +1,15 @@
+// УСТАНОВКА
+	1) Завершить конфликтующие процессы:
+		service php7.2-fpm stop  && service mysql stop  && service nginx stop  && service redis stop
+	2) docker-compose.yml
+		- Можно раскомментировать #container_name и задать свое имя, подходящее проекту.
+	3) config/conf.d/app.conf
+		- root /var/www/public // Для Laravel
+		- root /var/www // Для обычного проекта
+	4) Если не созданы, то нужно создать папки: db, redis.
+	В них хронятся база данных и кеш соответсвенно.
+
+
+// ДОПОЛНИТЕЛЬНО
+	Dockerfile (alt) = Dockerfile Alternative
+	Альтернативный, более тяжелый dockerfile. В нем устанавливается больше php расширений.
